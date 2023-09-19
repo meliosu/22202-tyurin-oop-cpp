@@ -3,4 +3,12 @@ project(task_0)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(task_0 main.cpp)
+add_executable(task_0 main.cpp
+        FileReader.cpp
+        FileReader.h
+        FileWriter.cpp
+        FileWriter.h
+        FrequencyList.cpp
+        FrequencyList.h
+        Parser.cpp
+        Parser.h)
