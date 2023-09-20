@@ -3,3 +3,31 @@
 //
 
 #include "FileWriter.h"
+
+#define CSV_HEADER "word,absFrequency,relFrequency"
+
+FileWriter::FileWriter(string filename) {
+    this->filename = filename;
+}
+
+void FileWriter::open() {
+    file.open(filename);
+}
+
+void FileWriter::close() {
+    file.close();
+}
+
+void FileWriter::writeFrequencyList(FrequencyList frequencyList) {
+    std::list<std::pair<string, int>> sortedList = frequencyList.getSortedList();
+    int wordCount = frequencyList.getWordCount();
+
+    file << CSV_HEADER << "\n";
+    for (auto pair : sortedList) {
+        string word = pair.first;
+        int absFrequency = pair.second;
+        float relFrequency = 100 * (float)absFrequency/wordCount;
+
+        file << word << "," << absFrequency << "," << relFrequency << "\n";
+    }
+}
