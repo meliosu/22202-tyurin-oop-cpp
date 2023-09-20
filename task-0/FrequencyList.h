@@ -20,7 +20,7 @@ private:
 public:
     FrequencyList();
 
-    void addWord(string word);
+    void addWord(const string& word);
 
     int getWordCount();
 

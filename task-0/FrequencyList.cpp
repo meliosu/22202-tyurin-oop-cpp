@@ -9,7 +9,7 @@ FrequencyList::FrequencyList() {
     wordCount = 0;
 }
 
-void FrequencyList::addWord(string word) {
+void FrequencyList::addWord(const string& word) {
     frequencyMap[word]++;
     wordCount++;
 }
@@ -24,7 +24,7 @@ std::vector<std::pair<string, int>> FrequencyList::getSortedList() {
     std::copy(frequencyMap.begin(), frequencyMap.end(), sortedList.begin());
 
     std::sort(sortedList.begin(), sortedList.end(),
-              [](std::pair<string, int> w1, std::pair<string, int> w2){
+              [](const std::pair<string, int>& w1, const std::pair<string, int>& w2){
         return w1.second > w2.second;
     });
 
