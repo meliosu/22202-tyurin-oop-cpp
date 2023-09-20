@@ -15,13 +15,24 @@ string Parser::toLower(string word) {
 std::list<string> Parser::parse(string line) {
     std::list<string> words = {};
 
-    std::regex r("[[:alnum:]']+");
-    std::sregex_iterator i(line.begin(), line.end(), r);
-    std::sregex_iterator end;
-    while (i != end) {
-        string word = i->str();
-        words.push_front(toLower(word));
-        i++;
+    int i = 0;
+    int j = 0;
+    while (j <= line.size()) {
+        if (std::isalnum(line[j])) {
+            j++;
+            continue;
+        }
+
+        if (i == j) {
+            i++;
+            j++;
+            continue;
+        }
+
+        words.push_front(toLower(line.substr(i, j - i)));
+
+        i = j;
+        j++;
     }
 
     return words;
