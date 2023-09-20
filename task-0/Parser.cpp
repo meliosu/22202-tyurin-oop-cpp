@@ -20,7 +20,6 @@ std::list<string> Parser::parse(string line) {
     std::sregex_iterator end;
     while (i != end) {
         string word = i->str();
-        toLower(word);
         words.push_front(toLower(word));
         i++;
     }
