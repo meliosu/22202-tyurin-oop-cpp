@@ -5,8 +5,8 @@
 #include "Parser.h"
 
 void Parser::toLower(string& word) {
-    for (int i = 0; i < word.size(); i++) {
-        word[i] = std::tolower(word[i]);
+    for (auto &c : word) {
+        c = std::tolower(c);
     }
 }
 
@@ -30,7 +30,6 @@ std::list<string> Parser::parse(string line) {
         string word = line.substr(i, j - i);
         toLower(word);
         words.push_front(word);
-        //words.push_front(toLower(line.substr(i, j - i)));
 
         i = j;
     }
