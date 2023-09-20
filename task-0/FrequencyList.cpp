@@ -18,13 +18,13 @@ int FrequencyList::getWordCount() {
     return wordCount;
 }
 
-std::list<std::pair<string, int>> FrequencyList::getSortedList() {
-    std::list<std::pair<string, int>> sortedList = {};
-    for (auto pair : frequencyMap) {
-        sortedList.push_front(std::pair<string, int>(pair.first, pair.second));
-    }
+std::vector<std::pair<string, int>> FrequencyList::getSortedList() {
+    std::vector<std::pair<string, int>> sortedList = {};
+    sortedList.resize(frequencyMap.size());
+    std::copy(frequencyMap.begin(), frequencyMap.end(), sortedList.begin());
 
-    sortedList.sort([](std::pair<string, int> w1, std::pair<string, int> w2){
+    std::sort(sortedList.begin(), sortedList.end(),
+              [](std::pair<string, int> w1, std::pair<string, int> w2){
         return w1.second > w2.second;
     });
 

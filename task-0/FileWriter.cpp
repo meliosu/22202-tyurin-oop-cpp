@@ -18,9 +18,9 @@ void FileWriter::close() {
     file.close();
 }
 
-void FileWriter::writeFrequencyList(FrequencyList frequencyList) {
-    std::list<std::pair<string, int>> sortedList = frequencyList.getSortedList();
-    int wordCount = frequencyList.getWordCount();
+void FileWriter::writeFrequencyList(FrequencyList* frequencyList) {
+    std::vector<std::pair<string, int>> sortedList = frequencyList->getSortedList();
+    int wordCount = frequencyList->getWordCount();
 
     file << CSV_HEADER << "\n";
     for (auto pair : sortedList) {

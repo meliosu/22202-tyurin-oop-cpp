@@ -6,7 +6,9 @@
 #define TASK_0_FREQUENCYLIST_H
 
 #include <unordered_map>
+#include <algorithm>
 #include <list>
+#include <vector>
 #include <string>
 
 using std::string;
@@ -22,7 +24,7 @@ public:
 
     int getWordCount();
 
-    std::list<std::pair<string, int>> getSortedList();
+    std::vector<std::pair<string, int>> getSortedList();
 };
 
 
