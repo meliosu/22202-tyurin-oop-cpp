@@ -29,7 +29,7 @@ std::list<string> Parser::parse(string line) {
 
         string word = line.substr(i, j - i);
         toLower(word);
-        words.push_front(word);
+        words.emplace_back(word);
 
         i = j;
     }
