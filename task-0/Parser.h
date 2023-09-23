@@ -16,7 +16,7 @@ private:
     void toLower(string& word);
 public:
     // converts a string to a list of words
-    std::list<string> parse(string line);
+    std::list<string> parse(const string& line);
 };
 
 

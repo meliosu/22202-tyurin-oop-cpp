@@ -10,7 +10,7 @@ void Parser::toLower(string& word) {
     }
 }
 
-std::list<string> Parser::parse(string line) {
+std::list<string> Parser::parse(const string& line) {
     std::list<string> words = {};
 
     int i = 0;
