@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
     while (fileReader.hasNext()) {
         string line = fileReader.getNext();
         std::list<string> words = parser.parse(line);
-        for (auto const &word : words) {
+        for (string const& word : words) {
             frequencyList.addWord(word);
         }
     }
