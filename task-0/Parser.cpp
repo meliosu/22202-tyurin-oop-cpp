@@ -4,34 +4,26 @@
 
 #include "Parser.h"
 
-void Parser::toLower(string& word) {
-    for (auto &c : word) {
-        c = std::tolower(c);
-    }
-}
-
 std::list<string> Parser::parse(const string& line) {
     std::list<string> words = {};
 
-    int i = 0;
-    int j = 0;
-    while (j <= line.size()) {
-        if (std::isalnum(line[j])) {
-            j++;
-            continue;
+    int word_len = 0;
+    string word;
+    for (const char& c : line) {
+        if (std::isalnum(c)) {
+            word += std::tolower(c);
+            word_len++;
         }
 
-        if (i == j) {
-            i++;
-            j++;
-            continue;
+        if (!std::isalnum(c) && word_len != 0) {
+            words.push_back(word);
+            word_len = 0;
+            word.clear();
         }
+    }
 
-        string word = line.substr(i, j - i);
-        toLower(word);
-        words.emplace_back(word);
-
-        i = j;
+    if (!word.empty()) {
+        words.push_back(word);
     }
 
     return words;
