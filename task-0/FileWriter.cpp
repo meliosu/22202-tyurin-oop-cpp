@@ -23,10 +23,10 @@ void FileWriter::writeFrequencyList(FrequencyList* frequencyList) {
     int wordCount = frequencyList->getWordCount();
 
     file << CSV_HEADER << "\n";
-    for (auto const &pair : sortedList) {
+    for (const std::pair<string, int>& pair : sortedList) {
         string word = pair.first;
         int absFrequency = pair.second;
-        float relFrequency = 100 * (float)absFrequency/wordCount;
+        float relFrequency = 100 * (float)absFrequency / wordCount;
 
         file << word << "," << absFrequency << "," << relFrequency << "\n";
     }
