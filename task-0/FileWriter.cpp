@@ -4,7 +4,7 @@
 
 #include "FileWriter.h"
 
-#define CSV_HEADER "word,absFrequency,relFrequency"
+#define CSV_HEADER "word;absFrequency;relFrequency"
 
 FileWriter::FileWriter(string filename) {
     this->filename = filename;
@@ -28,6 +28,6 @@ void FileWriter::writeFrequencyList(FrequencyList* frequencyList) {
         int absFrequency = pair.second;
         float relFrequency = 100 * (float)absFrequency / wordCount;
 
-        file << word << "," << absFrequency << "," << relFrequency << "\n";
+        file << word << ";" << absFrequency << ";" << relFrequency << "\n";
     }
 }
