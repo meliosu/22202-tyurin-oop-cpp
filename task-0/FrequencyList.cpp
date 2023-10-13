@@ -14,11 +14,11 @@ void FrequencyList::addWord(const string& word) {
     wordCount++;
 }
 
-int FrequencyList::getWordCount() {
+int FrequencyList::getWordCount() const {
     return wordCount;
 }
 
-std::vector<pair<string, int>> FrequencyList::getSortedList() {
+std::vector<pair<string, int>> FrequencyList::getSortedList() const {
     std::vector<pair<string, int>> sortedList = {};
     sortedList.resize(frequencyMap.size());
     std::copy(frequencyMap.begin(), frequencyMap.end(), sortedList.begin());

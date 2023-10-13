@@ -30,7 +30,7 @@ int main(int argc, char** argv) {
     FileWriter fileWriter(argv[2]);
     fileWriter.open();
 
-    fileWriter.writeFrequencyList(&frequencyList);
+    fileWriter.writeFrequencyList(frequencyList);
 
     fileReader.close();
     fileWriter.close();
