@@ -12,6 +12,7 @@
 #include <string>
 
 using std::string;
+using std::pair;
 
 class FrequencyList {
 private:
@@ -24,7 +25,7 @@ public:
 
     int getWordCount();
 
-    std::vector<std::pair<string, int>> getSortedList();
+    std::vector<pair<string, int>> getSortedList();
 };
 
 
