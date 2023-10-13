@@ -11,7 +11,7 @@
 class BitArray {
 private:
     std::vector<unsigned long> blocks;
-    int size;
+    int num_bits;
 public:
     BitArray();
     ~BitArray();
