@@ -24,7 +24,7 @@ public:
 
     void close();
 
-    void writeFrequencyList(FrequencyList* frequencyList);
+    void writeFrequencyList(const FrequencyList& frequencyList);
 };
 
 

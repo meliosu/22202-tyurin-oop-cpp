@@ -4,7 +4,7 @@
 
 #include "FileWriter.h"
 
-#define CSV_HEADER "word;absFrequency;relFrequency"
+#define CSV_FREQLIST_HEADER "word;absFrequency;relFrequency"
 
 FileWriter::FileWriter(string filename) {
     this->filename = filename;
@@ -18,11 +18,11 @@ void FileWriter::close() {
     file.close();
 }
 
-void FileWriter::writeFrequencyList(FrequencyList* frequencyList) {
-    std::vector<std::pair<string, int>> sortedList = frequencyList->getSortedList();
-    int wordCount = frequencyList->getWordCount();
+void FileWriter::writeFrequencyList(const FrequencyList& frequencyList) {
+    std::vector<std::pair<string, int>> sortedList = frequencyList.getSortedList();
+    int wordCount = frequencyList.getWordCount();
 
-    file << CSV_HEADER << "\n";
+    file << CSV_FREQLIST_HEADER << "\n";
     for (const std::pair<string, int>& pair : sortedList) {
         string word = pair.first;
         int absFrequency = pair.second;
