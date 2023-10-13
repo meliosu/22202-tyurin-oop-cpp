@@ -3,6 +3,7 @@ project(task_0)
 
 set(CMAKE_CXX_STANDARD 11)
 
+add_subdirectory(google_tests)
 add_executable(task_0 main.cpp
         FileReader.cpp
         FileReader.h
