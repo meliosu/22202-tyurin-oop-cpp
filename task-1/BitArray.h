@@ -6,8 +6,12 @@
 #define TASK_1_BITARRAY_H
 
 #include <string>
+#include <vector>
 
 class BitArray {
+private:
+    std::vector<unsigned long> blocks;
+    int size;
 public:
     BitArray();
     ~BitArray();
