@@ -23,9 +23,9 @@ public:
 
     void addWord(const string& word);
 
-    int getWordCount();
+    int getWordCount() const;
 
-    std::vector<pair<string, int>> getSortedList();
+    std::vector<pair<string, int>> getSortedList() const;
 };
 
 
