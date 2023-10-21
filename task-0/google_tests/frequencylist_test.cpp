@@ -17,7 +17,7 @@ TEST(FrequencyList, NonUniqueWords) {
     frequencyMap.addWord("two");
     frequencyMap.addWord("two");
 
-    ASSERT_EQ(frequencyMap.getWordCount(), 6);
+    ASSERT_EQ(frequencyMap.getWordsCount(), 6);
 
     std::vector<std::pair<std::string, int>> sortedList = frequencyMap.getSortedList();
 
@@ -36,7 +36,7 @@ TEST(FrequencyList, UniqueWords) {
     frequencyMap.addWord("123");
     frequencyMap.addWord("def");
 
-    ASSERT_EQ(frequencyMap.getWordCount(), 3);
+    ASSERT_EQ(frequencyMap.getWordsCount(), 3);
 }
 
 TEST(FrequencyList, EmptyList) {
