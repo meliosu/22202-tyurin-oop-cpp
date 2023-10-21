@@ -24,7 +24,7 @@ public:
 
     void close();
 
-    void writeFrequencyList(const FrequencyList& frequencyList);
+    void writeVec(const std::vector<string>& strings, char delim);
 };
 
 
