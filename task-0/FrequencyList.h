@@ -23,7 +23,7 @@ public:
 
     void addWord(const string& word);
 
-    int getWordCount() const;
+    int getWordsCount() const;
 
     std::vector<pair<string, int>> getSortedList() const;
 };

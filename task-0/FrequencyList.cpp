@@ -14,7 +14,7 @@ void FrequencyList::addWord(const string& word) {
     wordCount++;
 }
 
-int FrequencyList::getWordCount() const {
+int FrequencyList::getWordsCount() const {
     return wordCount;
 }
 
