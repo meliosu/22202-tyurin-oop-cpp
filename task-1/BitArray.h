@@ -14,7 +14,6 @@ private:
     int num_bits;
 public:
     BitArray();
-    ~BitArray();
 
     explicit BitArray(int num_bits, unsigned long value = 0);
     BitArray(const BitArray& b);
@@ -43,11 +42,7 @@ public:
 
     BitArray operator>>(int n) const;
 
-    BitArray& set(int n, bool val = true);
-
     BitArray& set();
-
-    BitArray& reset(int n);
 
     BitArray& reset();
 
