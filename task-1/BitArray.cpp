@@ -4,6 +4,8 @@
 
 #include "BitArray.h"
 
+#include <algorithm>
+
 #define BITS_PER_BLOCK 64
 
 BitArray::BitArray() {
@@ -22,4 +24,13 @@ BitArray::BitArray(const BitArray &b) {
     std::copy(b.blocks.begin(), b.blocks.end(), blocks.begin());
     num_bits = b.num_bits;
 }
+
+BitArray& BitArray::operator=(const BitArray &b) {
+    std::copy(b.blocks.begin(), b.blocks.end(), blocks.begin());
+    num_bits = b.num_bits;
+}
+
+
+
+
 
