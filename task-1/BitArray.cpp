@@ -31,6 +31,12 @@ BitArray& BitArray::operator=(const BitArray &b) {
     return *this;
 }
 
+void BitArray::swap(BitArray &b) {
+    BitArray temp = *this;
+    *this = b;
+    b = temp;
+}
+
 void BitArray::resize(int num_bits, bool value) {
     int new_size = static_cast<int>((num_bits - 1) / BITS_PER_BLOCK) + 1;
     blocks.resize(new_size, value);
