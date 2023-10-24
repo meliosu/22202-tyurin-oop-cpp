@@ -152,3 +152,33 @@ std::string BitArray::to_string() const {
 
     return string_representation;
 }
+
+bool operator==(const BitArray& a, const BitArray& b) {
+    if (a.size() != b.size()) {
+        return false;
+    }
+
+    return a.blocks == b.blocks;
+}
+
+bool operator!=(const BitArray& a, const BitArray& b) {
+    return !(a == b);
+}
+
+BitArray operator&(const BitArray& b1, const BitArray& b2) {
+    BitArray new_bitarray = b1;
+    new_bitarray &= b2;
+    return new_bitarray;
+}
+
+BitArray operator|(const BitArray& b1, const BitArray& b2) {
+    BitArray new_bitarray = b1;
+    new_bitarray |= b2;
+    return new_bitarray;
+}
+
+BitArray operator^(const BitArray& b1, const BitArray& b2) {
+    BitArray new_bitarray = b1;
+    new_bitarray ^= b2;
+    return new_bitarray;
+}
