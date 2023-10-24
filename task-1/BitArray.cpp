@@ -31,6 +31,14 @@ BitArray& BitArray::operator=(const BitArray &b) {
     return *this;
 }
 
+void BitArray::resize(int num_bits, bool value) {
+    int new_size = static_cast<int>((num_bits - 1) / BITS_PER_BLOCK) + 1;
+    blocks.resize(new_size, value);
+    blocks[blocks.size() - 1] &= ~0 << (BITS_PER_BLOCK - (num_bits % BITS_PER_BLOCK));
+
+    this->num_bits = num_bits;
+}
+
 void BitArray::clear() {
     blocks.clear();
     num_bits = 0;
@@ -60,6 +68,24 @@ BitArray& BitArray::operator^=(const BitArray &b) {
     return *this;
 }
 
+BitArray& BitArray::set() {
+    for (unsigned long long block : blocks) {
+        block = ~0;
+    }
+
+    blocks[blocks.size() - 1] ^= ~0 >> (num_bits % BITS_PER_BLOCK);
+
+    return *this;
+}
+
+BitArray& BitArray::reset() {
+    for (unsigned long long block : blocks) {
+        block = 0;
+    }
+
+    return *this;
+}
+
 bool BitArray::any() const {
     for (unsigned long long block : blocks) {
         if (block) {
@@ -78,6 +104,16 @@ bool BitArray::none() const {
     }
 
     return true;
+}
+
+BitArray BitArray::operator~() const {
+    BitArray inverted_bitarray = *this;
+    for (unsigned long long block : inverted_bitarray.blocks) {
+        block = ~block;
+    }
+
+    inverted_bitarray.blocks[blocks.size() - 1] ^= ~0 >> (num_bits % BITS_PER_BLOCK);
+    return inverted_bitarray;
 }
 
 int BitArray::count() const {
