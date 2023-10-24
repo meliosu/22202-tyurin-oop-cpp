@@ -61,14 +61,16 @@ public:
     bool empty() const;
 
     std::string to_string() const;
+
+    friend bool operator==(const BitArray& a, const BitArray& b);
+    friend bool operator!=(const BitArray& a, const BitArray& b);
+
+    friend BitArray operator&(const BitArray& b1, const BitArray& b2);
+    friend BitArray operator|(const BitArray& b1, const BitArray& b2);
+    friend BitArray operator^(const BitArray& b1, const BitArray& b2);
 };
 
-bool operator==(const BitArray & a, const BitArray & b);
-bool operator!=(const BitArray & a, const BitArray & b);
 
-BitArray operator&(const BitArray& b1, const BitArray& b2);
-BitArray operator|(const BitArray& b1, const BitArray& b2);
-BitArray operator^(const BitArray& b1, const BitArray& b2);
 
 
 #endif //TASK_1_BITARRAY_H
