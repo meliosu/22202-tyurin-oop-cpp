@@ -84,12 +84,21 @@ BitArray& BitArray::set() {
     return *this;
 }
 
+void BitArray::set(int i) {
+    blocks[i / BITS_PER_BLOCK] |= (1 << (BITS_PER_BLOCK - (i % BITS_PER_BLOCK)));
+}
+
 BitArray& BitArray::reset() {
     for (unsigned long long block : blocks) {
         block = 0;
     }
 
     return *this;
+}
+
+void BitArray::reset(int i) {
+    blocks[i / BITS_PER_BLOCK] &= ~(1 << (BITS_PER_BLOCK - (i % BITS_PER_BLOCK)));
+
 }
 
 bool BitArray::any() const {
@@ -134,6 +143,23 @@ int BitArray::count() const {
 bool BitArray::operator[](int i) const {
     bool bit = (blocks[i / BITS_PER_BLOCK] >> (i % BITS_PER_BLOCK)) & 1;
     return bit;
+}
+
+BitArray::Reference::Reference(BitArray &bitArray, int i) : bit_array(bitArray) {
+    this->bit_array = bitArray;
+    this->num_bit = i;
+}
+
+BitArray::Reference& BitArray::Reference::operator=(bool value) {
+    if (value) {
+        bit_array.set(num_bit);
+    } else {
+        bit_array.reset(num_bit);
+    }
+}
+
+BitArray::Reference BitArray::operator[](int i) {
+    return BitArray::Reference(*this, i);
 }
 
 int BitArray::size() const {

@@ -13,6 +13,16 @@ private:
     std::vector<unsigned long> blocks;
     int num_bits;
 public:
+    class Reference {
+    private:
+        BitArray& bit_array;
+        int num_bit;
+
+    public:
+        Reference(BitArray &bitArray, int i);
+        Reference& operator=(bool value);
+    };
+
     BitArray();
 
     explicit BitArray(int num_bits, unsigned long value = 0);
@@ -44,7 +54,11 @@ public:
 
     BitArray& set();
 
+    void set(int i);
+
     BitArray& reset();
+
+    void reset(int i);
 
     bool any() const;
 
@@ -55,6 +69,8 @@ public:
     int count() const;
 
     bool operator[](int i) const;
+
+    Reference operator[](int i);
 
     int size() const;
 
