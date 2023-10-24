@@ -10,7 +10,7 @@
 
 class BitArray {
 private:
-    std::vector<unsigned long> blocks;
+    std::vector<unsigned long long> blocks;
     int num_bits;
 public:
     class Reference {
@@ -25,7 +25,7 @@ public:
 
     BitArray();
 
-    explicit BitArray(int num_bits, unsigned long value = 0);
+    explicit BitArray(int num_bits, unsigned long long value = 0);
     BitArray(const BitArray& b);
 
     void swap(BitArray& b);
@@ -85,8 +85,6 @@ public:
     friend BitArray operator|(const BitArray& b1, const BitArray& b2);
     friend BitArray operator^(const BitArray& b1, const BitArray& b2);
 };
-
-
 
 
 #endif //TASK_1_BITARRAY_H

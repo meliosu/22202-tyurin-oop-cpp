@@ -12,7 +12,7 @@ BitArray::BitArray() {
     num_bits = 0;
 }
 
-BitArray::BitArray(int num_bits, unsigned long value) {
+BitArray::BitArray(int num_bits, unsigned long long value) {
     int new_size = static_cast<int>((num_bits - 1) / BITS_PER_BLOCK) + 1;
     blocks.resize(new_size);
 
@@ -85,7 +85,7 @@ BitArray& BitArray::set() {
 }
 
 void BitArray::set(int i) {
-    blocks[i / BITS_PER_BLOCK] |= (1 << (BITS_PER_BLOCK - (i % BITS_PER_BLOCK)));
+    blocks[i / BITS_PER_BLOCK] |= ((unsigned long long)1 << (BITS_PER_BLOCK - (i % BITS_PER_BLOCK) - 1));
 }
 
 BitArray& BitArray::reset() {
@@ -97,7 +97,7 @@ BitArray& BitArray::reset() {
 }
 
 void BitArray::reset(int i) {
-    blocks[i / BITS_PER_BLOCK] &= ~(1 << (BITS_PER_BLOCK - (i % BITS_PER_BLOCK)));
+    blocks[i / BITS_PER_BLOCK] &= ~((unsigned long long)1 << (BITS_PER_BLOCK - (i % BITS_PER_BLOCK)));
 
 }
 
@@ -141,7 +141,7 @@ int BitArray::count() const {
 }
 
 bool BitArray::operator[](int i) const {
-    bool bit = (blocks[i / BITS_PER_BLOCK] >> (i % BITS_PER_BLOCK)) & 1;
+    bool bit = (blocks[i / BITS_PER_BLOCK] >> (BITS_PER_BLOCK - (i % BITS_PER_BLOCK) - 1)) & 1;
     return bit;
 }
 
@@ -156,6 +156,8 @@ BitArray::Reference& BitArray::Reference::operator=(bool value) {
     } else {
         bit_array.reset(num_bit);
     }
+
+    return *this;
 }
 
 BitArray::Reference BitArray::operator[](int i) {
