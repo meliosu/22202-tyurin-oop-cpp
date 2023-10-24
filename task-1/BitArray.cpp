@@ -7,6 +7,7 @@
 #include <algorithm>
 
 #define BITS_PER_BLOCK 64
+#define ALL_1 0xffffffffffffffff
 
 BitArray::BitArray() {
     num_bits = 0;
@@ -21,12 +22,12 @@ BitArray::BitArray(int num_bits, unsigned long long value) {
 }
 
 BitArray::BitArray(const BitArray &b) {
-    std::copy(b.blocks.begin(), b.blocks.end(), blocks.begin());
+    blocks = b.blocks;
     num_bits = b.num_bits;
 }
 
 BitArray& BitArray::operator=(const BitArray &b) {
-    std::copy(b.blocks.begin(), b.blocks.end(), blocks.begin());
+    blocks = b.blocks;
     num_bits = b.num_bits;
     return *this;
 }
@@ -40,7 +41,7 @@ void BitArray::swap(BitArray &b) {
 void BitArray::resize(int num_bits, bool value) {
     int new_size = static_cast<int>((num_bits - 1) / BITS_PER_BLOCK) + 1;
     blocks.resize(new_size, value);
-    blocks[blocks.size() - 1] &= ~0 << (BITS_PER_BLOCK - (num_bits % BITS_PER_BLOCK));
+    blocks[blocks.size() - 1] &= ALL_1 << (BITS_PER_BLOCK - (num_bits % BITS_PER_BLOCK));
 
     this->num_bits = num_bits;
 }
@@ -79,7 +80,7 @@ BitArray& BitArray::set() {
         block = ~0;
     }
 
-    blocks[blocks.size() - 1] ^= ~0 >> (num_bits % BITS_PER_BLOCK);
+    blocks[blocks.size() - 1] ^= ALL_1 >> (num_bits % BITS_PER_BLOCK);
 
     return *this;
 }
@@ -122,12 +123,12 @@ bool BitArray::none() const {
 }
 
 BitArray BitArray::operator~() const {
-    BitArray inverted_bitarray = *this;
-    for (unsigned long long block : inverted_bitarray.blocks) {
+    BitArray inverted_bitarray(*this);
+    for (unsigned long long& block : inverted_bitarray.blocks) {
         block = ~block;
     }
 
-    inverted_bitarray.blocks[blocks.size() - 1] ^= ~0 >> (num_bits % BITS_PER_BLOCK);
+    inverted_bitarray.blocks[blocks.size() - 1] ^= (ALL_1 >> (num_bits % BITS_PER_BLOCK));
     return inverted_bitarray;
 }
 
