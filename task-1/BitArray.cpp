@@ -81,6 +81,82 @@ BitArray& BitArray::operator^=(const BitArray &b) {
     return *this;
 }
 
+BitArray& BitArray::operator<<=(int n) {
+    if (n >= num_bits) {
+        this->reset();
+        return *this;
+    }
+
+    int element_shift = n / BITS_PER_BLOCK;
+    int bitwise_shift = n % BITS_PER_BLOCK;
+
+    if (element_shift > 0) {
+        for (int i = 0; i < blocks.size() - element_shift; i++) {
+            blocks[i] = blocks[i + element_shift];
+        }
+
+        for (int i = blocks.size() - element_shift; i < blocks.size(); i++) {
+            blocks[i] = 0;
+        }
+    }
+
+    if (bitwise_shift > 0) {
+        for (int i = 0; i < blocks.size() - element_shift - 1; i++) {
+            blocks[i] <<= bitwise_shift;
+            blocks[i] |= (blocks[i + 1] >> (BITS_PER_BLOCK - bitwise_shift));
+        }
+
+        blocks[blocks.size() - element_shift - 1] <<= bitwise_shift;
+    }
+
+    return *this;
+}
+
+BitArray& BitArray::operator>>=(int n) {
+    if (n >= num_bits) {
+        this->reset();
+        return *this;
+    }
+
+    int element_shift = n / BITS_PER_BLOCK;
+    int bitwise_shift = n % BITS_PER_BLOCK;
+
+    if (element_shift > 0) {
+        for (int i = blocks.size() - 1; i >= element_shift; i--) {
+            blocks[i] = blocks[i - element_shift];
+        }
+
+        for (int i = element_shift - 1; i >= 0; i--) {
+            blocks[i] = 0;
+        }
+    }
+
+    if (bitwise_shift > 0) {
+        for (int i = blocks.size() - 1; i > element_shift; i--) {
+            blocks[i] >>= bitwise_shift;
+            blocks[i] |= (blocks[i - 1] << (BITS_PER_BLOCK - bitwise_shift));
+        }
+
+        blocks[element_shift] >>= bitwise_shift;
+
+        blocks[blocks.size() - 1] &= ALL_1 << (BITS_PER_BLOCK - (num_bits % BITS_PER_BLOCK));
+    }
+
+    return *this;
+}
+
+BitArray BitArray::operator<<(int n) const {
+    BitArray shifted_bitarray(*this);
+    shifted_bitarray <<= n;
+    return shifted_bitarray;
+}
+
+BitArray BitArray::operator>>(int n) const {
+    BitArray shifted_bitarray(*this);
+    shifted_bitarray >>= n;
+    return shifted_bitarray;
+}
+
 BitArray& BitArray::set() {
     for (unsigned long long& block : blocks) {
         block = ALL_1;
@@ -152,8 +228,8 @@ bool BitArray::operator[](int i) const {
     return bit;
 }
 
-BitArray::Reference::Reference(BitArray &bitArray, int i) : bit_array(bitArray) {
-    this->bit_array = bitArray;
+BitArray::Reference::Reference(BitArray &bit_array, int i) : bit_array(bit_array) {
+    this->bit_array = bit_array;
     this->num_bit = i;
 }
 
@@ -205,19 +281,19 @@ bool operator!=(const BitArray& a, const BitArray& b) {
 }
 
 BitArray operator&(const BitArray& b1, const BitArray& b2) {
-    BitArray new_bitarray = b1;
+    BitArray new_bitarray(b1);
     new_bitarray &= b2;
     return new_bitarray;
 }
 
 BitArray operator|(const BitArray& b1, const BitArray& b2) {
-    BitArray new_bitarray = b1;
+    BitArray new_bitarray(b1);
     new_bitarray |= b2;
     return new_bitarray;
 }
 
 BitArray operator^(const BitArray& b1, const BitArray& b2) {
-    BitArray new_bitarray = b1;
+    BitArray new_bitarray(b1);
     new_bitarray ^= b2;
     return new_bitarray;
 }
