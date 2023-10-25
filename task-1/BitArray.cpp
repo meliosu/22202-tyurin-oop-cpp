@@ -12,6 +12,10 @@ BitArray::BitArray() {
 }
 
 BitArray::BitArray(int num_bits, unsigned long long value) {
+    if (num_bits < 0) {
+        throw BitArrayException("Number of bits can't be negative");
+    }
+
     int new_size = static_cast<int>((num_bits - 1) / BITS_PER_BLOCK) + 1;
     blocks.resize(new_size);
 
@@ -37,6 +41,10 @@ void BitArray::swap(BitArray &b) {
 }
 
 void BitArray::resize(int num_bits, bool value) {
+    if (num_bits < 0) {
+        throw BitArrayException("Number of bits can't be negative");
+    }
+
     int new_size = static_cast<int>((num_bits - 1) / BITS_PER_BLOCK) + 1;
     if (value) {
         if (num_bits % BITS_PER_BLOCK != 0) {
@@ -59,6 +67,10 @@ void BitArray::clear() {
 }
 
 BitArray& BitArray::operator&=(const BitArray &b) {
+    if (this->size() != b.size()) {
+        throw BitArrayException("BitArray operands must be of the same size");
+    }
+
     for (int i = 0; i <  blocks.size(); i++) {
         blocks[i] &= b.blocks[i];
     }
@@ -67,6 +79,10 @@ BitArray& BitArray::operator&=(const BitArray &b) {
 }
 
 BitArray& BitArray::operator|=(const BitArray &b) {
+    if (this->size() != b.size()) {
+        throw BitArrayException("BitArray operands must be of the same size");
+    }
+
     for (int i = 0; i <  blocks.size(); i++) {
         blocks[i] |= b.blocks[i];
     }
@@ -75,6 +91,10 @@ BitArray& BitArray::operator|=(const BitArray &b) {
 }
 
 BitArray& BitArray::operator^=(const BitArray &b) {
+    if (this->size() != b.size()) {
+        throw BitArrayException("BitArray operands must be of the same size");
+    }
+
     for (int i = 0; i <  blocks.size(); i++) {
         blocks[i] ^= b.blocks[i];
     }
@@ -83,6 +103,10 @@ BitArray& BitArray::operator^=(const BitArray &b) {
 }
 
 BitArray& BitArray::operator<<=(int n) {
+    if (n < 0) {
+        throw BitArrayException("Cannot bitshift by negative amount");
+    }
+
     if (n >= num_bits) {
         this->reset();
         return *this;
@@ -114,6 +138,10 @@ BitArray& BitArray::operator<<=(int n) {
 }
 
 BitArray& BitArray::operator>>=(int n) {
+    if (n < 0) {
+        throw BitArrayException("Cannot bitshift by negative amount");
+    }
+
     if (n >= num_bits) {
         this->reset();
         return *this;
@@ -147,12 +175,20 @@ BitArray& BitArray::operator>>=(int n) {
 }
 
 BitArray BitArray::operator<<(int n) const {
+    if (n < 0) {
+        throw BitArrayException("Cannot bitshift by negative amount");
+    }
+
     BitArray shifted_bitarray(*this);
     shifted_bitarray <<= n;
     return shifted_bitarray;
 }
 
 BitArray BitArray::operator>>(int n) const {
+    if (n < 0) {
+        throw BitArrayException("Cannot bitshift by negative amount");
+    }
+
     BitArray shifted_bitarray(*this);
     shifted_bitarray >>= n;
     return shifted_bitarray;
@@ -231,6 +267,10 @@ int BitArray::count() const {
 }
 
 bool BitArray::operator[](int i) const {
+    if (i >= num_bits) {
+        throw BitArrayException("BitArray index out of bounds");
+    }
+
     bool bit = (blocks[i / BITS_PER_BLOCK] >> (BITS_PER_BLOCK - (i % BITS_PER_BLOCK) - 1)) & 1;
     return bit;
 }
@@ -251,6 +291,10 @@ BitArray::Reference& BitArray::Reference::operator=(bool value) {
 }
 
 BitArray::Reference BitArray::operator[](int i) {
+    if (i >= num_bits) {
+        throw BitArrayException("BitArray index out of bounds");
+    }
+
     return BitArray::Reference(*this, i);
 }
 
@@ -294,18 +338,30 @@ bool operator!=(const BitArray& a, const BitArray& b) {
 }
 
 BitArray operator&(const BitArray& b1, const BitArray& b2) {
+    if (b1.size() != b2.size()) {
+        throw BitArrayException("BitArray operands must be of the same size");
+    }
+
     BitArray new_bitarray(b1);
     new_bitarray &= b2;
     return new_bitarray;
 }
 
 BitArray operator|(const BitArray& b1, const BitArray& b2) {
+    if (b1.size() != b2.size()) {
+        throw BitArrayException("BitArray operands must be of the same size");
+    }
+
     BitArray new_bitarray(b1);
     new_bitarray |= b2;
     return new_bitarray;
 }
 
 BitArray operator^(const BitArray& b1, const BitArray& b2) {
+    if (b1.size() != b2.size()) {
+        throw BitArrayException("BitArray operands must be of the same size");
+    }
+
     BitArray new_bitarray(b1);
     new_bitarray ^= b2;
     return new_bitarray;

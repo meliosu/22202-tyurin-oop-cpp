@@ -8,6 +8,8 @@
 #include <string>
 #include <vector>
 
+#include "BitArrayException.cpp"
+
 class BitArray {
 private:
     std::vector<unsigned long long> blocks;
@@ -22,6 +24,11 @@ private:
         Reference(BitArray &bitArray, int i);
         Reference& operator=(bool value);
     };
+
+    void set(int i);
+
+    void reset(int i);
+
 public:
     BitArray();
 
@@ -54,11 +61,7 @@ public:
 
     BitArray& set();
 
-    void set(int i);
-
     BitArray& reset();
-
-    void reset(int i);
 
     bool any() const;
 
