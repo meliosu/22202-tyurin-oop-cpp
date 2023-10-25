@@ -40,7 +40,13 @@ void BitArray::swap(BitArray &b) {
 
 void BitArray::resize(int num_bits, bool value) {
     int new_size = static_cast<int>((num_bits - 1) / BITS_PER_BLOCK) + 1;
-    blocks.resize(new_size, value);
+    if (value) {
+        blocks[blocks.size() - 1] |= ALL_1 >> (this->num_bits % BITS_PER_BLOCK);
+        blocks.resize(new_size, ALL_1);
+    } else {
+        blocks.resize(new_size, 0);
+    }
+
     blocks[blocks.size() - 1] &= ALL_1 << (BITS_PER_BLOCK - (num_bits % BITS_PER_BLOCK));
 
     this->num_bits = num_bits;
