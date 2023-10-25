@@ -191,7 +191,11 @@ bool operator==(const BitArray& a, const BitArray& b) {
 }
 
 bool operator!=(const BitArray& a, const BitArray& b) {
-    return !(a == b);
+    if (a.size() != b.size()) {
+        return true;
+    }
+
+    return a.blocks != b.blocks;
 }
 
 BitArray operator&(const BitArray& b1, const BitArray& b2) {
