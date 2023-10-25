@@ -76,8 +76,8 @@ BitArray& BitArray::operator^=(const BitArray &b) {
 }
 
 BitArray& BitArray::set() {
-    for (unsigned long long block : blocks) {
-        block = ~0;
+    for (unsigned long long& block : blocks) {
+        block = ALL_1;
     }
 
     blocks[blocks.size() - 1] ^= ALL_1 >> (num_bits % BITS_PER_BLOCK);
@@ -90,7 +90,7 @@ void BitArray::set(int i) {
 }
 
 BitArray& BitArray::reset() {
-    for (unsigned long long block : blocks) {
+    for (unsigned long long& block : blocks) {
         block = 0;
     }
 
@@ -135,7 +135,7 @@ BitArray BitArray::operator~() const {
 int BitArray::count() const {
     int count = 0;
     for (unsigned long long block : blocks) {
-        count += __builtin_popcount(block);
+        count += __builtin_popcountll(block);
     }
 
     return count;
