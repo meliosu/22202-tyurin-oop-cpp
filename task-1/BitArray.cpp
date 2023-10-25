@@ -4,8 +4,6 @@
 
 #include "BitArray.h"
 
-#include <algorithm>
-
 #define BITS_PER_BLOCK 64
 #define ALL_1 0xffffffffffffffff
 
@@ -41,14 +39,17 @@ void BitArray::swap(BitArray &b) {
 void BitArray::resize(int num_bits, bool value) {
     int new_size = static_cast<int>((num_bits - 1) / BITS_PER_BLOCK) + 1;
     if (value) {
-        blocks[blocks.size() - 1] |= ALL_1 >> (this->num_bits % BITS_PER_BLOCK);
+        if (num_bits % BITS_PER_BLOCK != 0) {
+            blocks[blocks.size() - 1] |= ALL_1 >> (this->num_bits % BITS_PER_BLOCK);
+        }
         blocks.resize(new_size, ALL_1);
     } else {
         blocks.resize(new_size, 0);
     }
 
-    blocks[blocks.size() - 1] &= ALL_1 << (BITS_PER_BLOCK - (num_bits % BITS_PER_BLOCK));
-
+    if (num_bits % 64 != 0) {
+        blocks[blocks.size() - 1] &= ALL_1 << (BITS_PER_BLOCK - (num_bits % BITS_PER_BLOCK));
+    }
     this->num_bits = num_bits;
 }
 
@@ -162,7 +163,9 @@ BitArray& BitArray::set() {
         block = ALL_1;
     }
 
-    blocks[blocks.size() - 1] ^= ALL_1 >> (num_bits % BITS_PER_BLOCK);
+    if (num_bits % BITS_PER_BLOCK != 0) {
+        blocks[blocks.size() - 1] ^= ALL_1 >> (num_bits % BITS_PER_BLOCK);
+    }
 
     return *this;
 }
@@ -180,7 +183,7 @@ BitArray& BitArray::reset() {
 }
 
 void BitArray::reset(int i) {
-    blocks[i / BITS_PER_BLOCK] &= ~((unsigned long long)1 << (BITS_PER_BLOCK - (i % BITS_PER_BLOCK)));
+    blocks[i / BITS_PER_BLOCK] &= ~((unsigned long long)1 << (BITS_PER_BLOCK - (i % BITS_PER_BLOCK) - 1));
 
 }
 
@@ -210,7 +213,11 @@ BitArray BitArray::operator~() const {
         block = ~block;
     }
 
-    inverted_bitarray.blocks[blocks.size() - 1] ^= (ALL_1 >> (num_bits % BITS_PER_BLOCK));
+    if (num_bits % BITS_PER_BLOCK != 0) {
+        inverted_bitarray.blocks[blocks.size() - 1] ^= (ALL_1 >> (num_bits % BITS_PER_BLOCK));
+
+    }
+
     return inverted_bitarray;
 }
 
@@ -228,7 +235,7 @@ bool BitArray::operator[](int i) const {
     return bit;
 }
 
-BitArray::Reference::Reference(BitArray &bit_array, int i) : bit_array(bit_array) {
+BitArray::Reference::Reference(BitArray& bit_array, int i) : bit_array(bit_array) {
     this->bit_array = bit_array;
     this->num_bit = i;
 }
@@ -245,6 +252,12 @@ BitArray::Reference& BitArray::Reference::operator=(bool value) {
 
 BitArray::Reference BitArray::operator[](int i) {
     return BitArray::Reference(*this, i);
+}
+
+void BitArray::push_back(bool bit) {
+    this->resize(num_bits + 1);
+
+    (*this)[num_bits - 1] = bit;
 }
 
 int BitArray::size() const {
