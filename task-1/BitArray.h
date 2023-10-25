@@ -12,7 +12,7 @@ class BitArray {
 private:
     std::vector<unsigned long long> blocks;
     int num_bits;
-public:
+
     class Reference {
     private:
         BitArray& bit_array;
@@ -22,7 +22,7 @@ public:
         Reference(BitArray &bitArray, int i);
         Reference& operator=(bool value);
     };
-
+public:
     BitArray();
 
     explicit BitArray(int num_bits, unsigned long long value = 0);
