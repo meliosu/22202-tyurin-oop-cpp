@@ -2,6 +2,7 @@
 // Created by Alexander on 13.10.2023.
 //
 
+#include <algorithm>
 #include "BitArray.h"
 
 #define BITS_PER_BLOCK 64
@@ -16,8 +17,8 @@ BitArray::BitArray(int num_bits, unsigned long long value) {
         throw BitArrayException("Number of bits can't be negative");
     }
 
-    int new_size = static_cast<int>((num_bits - 1) / BITS_PER_BLOCK) + 1;
-    blocks.resize(new_size);
+    int size = static_cast<int>((num_bits - 1) / BITS_PER_BLOCK) + 1;
+    blocks.resize(size);
 
     this->num_bits = num_bits;
     blocks[0] = value;
@@ -40,25 +41,26 @@ void BitArray::swap(BitArray &b) {
     b = temp;
 }
 
-void BitArray::resize(int num_bits, bool value) {
-    if (num_bits < 0) {
+void BitArray::resize(int new_num_bits, bool value) {
+    if (new_num_bits < 0) {
         throw BitArrayException("Number of bits can't be negative");
     }
 
-    int new_size = static_cast<int>((num_bits - 1) / BITS_PER_BLOCK) + 1;
+    int new_size = static_cast<int>((new_num_bits - 1) / BITS_PER_BLOCK) + 1;
     if (value) {
         if (num_bits % BITS_PER_BLOCK != 0) {
-            blocks[blocks.size() - 1] |= ALL_1 >> (this->num_bits % BITS_PER_BLOCK);
+            blocks[blocks.size() - 1] |= ALL_1 >> (num_bits % BITS_PER_BLOCK);
         }
         blocks.resize(new_size, ALL_1);
     } else {
         blocks.resize(new_size, 0);
     }
 
-    if (num_bits % 64 != 0) {
+    if (new_num_bits % 64 != 0) {
         blocks[blocks.size() - 1] &= ALL_1 << (BITS_PER_BLOCK - (num_bits % BITS_PER_BLOCK));
     }
-    this->num_bits = num_bits;
+
+    num_bits = new_num_bits;
 }
 
 void BitArray::clear() {
@@ -220,27 +222,14 @@ BitArray& BitArray::reset() {
 
 void BitArray::reset(int i) {
     blocks[i / BITS_PER_BLOCK] &= ~((unsigned long long)1 << (BITS_PER_BLOCK - (i % BITS_PER_BLOCK) - 1));
-
 }
 
 bool BitArray::any() const {
-    for (unsigned long long block : blocks) {
-        if (block) {
-            return true;
-        }
-    }
-
-    return false;
+    return std::any_of(blocks.begin(), blocks.end(), [](unsigned long long a) {return a != 0;});
 }
 
 bool BitArray::none() const {
-    for (unsigned long long block : blocks) {
-        if (block) {
-            return false;
-        }
-    }
-
-    return true;
+    return std::all_of(blocks.begin(), blocks.end(), [](unsigned long long a) {return a == 0;});
 }
 
 BitArray BitArray::operator~() const {
@@ -259,7 +248,7 @@ BitArray BitArray::operator~() const {
 
 int BitArray::count() const {
     int count = 0;
-    for (unsigned long long block : blocks) {
+    for (const unsigned long long& block : blocks) {
         count += __builtin_popcountll(block);
     }
 
