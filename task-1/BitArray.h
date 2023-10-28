@@ -31,7 +31,7 @@ private:
 
     void reset(int i);
 
-    bool read(int i);
+    bool read(int i) const;
 
 public:
     BitArray();

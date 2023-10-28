@@ -224,7 +224,7 @@ void BitArray::reset(int i) {
     blocks[i / BITS_PER_BLOCK] &= ~((unsigned long long)1 << (BITS_PER_BLOCK - (i % BITS_PER_BLOCK) - 1));
 }
 
-bool BitArray::read(int i) {
+bool BitArray::read(int i) const {
     return (blocks[i / BITS_PER_BLOCK] >> (BITS_PER_BLOCK - (i % BITS_PER_BLOCK) - 1)) & 1;
 }
 
@@ -264,8 +264,7 @@ bool BitArray::operator[](int i) const {
         throw BitArrayException("BitArray index out of bounds");
     }
 
-    bool bit = (blocks[i / BITS_PER_BLOCK] >> (BITS_PER_BLOCK - (i % BITS_PER_BLOCK) - 1)) & 1;
-    return bit;
+    return this->read(i);
 }
 
 BitArray::Reference::Reference(BitArray& bit_array, int i) : bit_array(bit_array) {
