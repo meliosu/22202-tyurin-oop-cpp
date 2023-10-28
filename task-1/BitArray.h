@@ -23,11 +23,15 @@ private:
     public:
         Reference(BitArray &bitArray, int i);
         Reference& operator=(bool value);
+        Reference& operator=(Reference& reference);
+        operator bool();
     };
 
     void set(int i);
 
     void reset(int i);
+
+    bool read(int i);
 
 public:
     BitArray();

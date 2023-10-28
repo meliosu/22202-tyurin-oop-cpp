@@ -56,7 +56,7 @@ void BitArray::resize(int new_num_bits, bool value) {
         blocks.resize(new_size, 0);
     }
 
-    if (new_num_bits % 64 != 0) {
+    if (new_num_bits % BITS_PER_BLOCK != 0) {
         blocks[blocks.size() - 1] &= ALL_1 << (BITS_PER_BLOCK - (num_bits % BITS_PER_BLOCK));
     }
 
@@ -224,6 +224,10 @@ void BitArray::reset(int i) {
     blocks[i / BITS_PER_BLOCK] &= ~((unsigned long long)1 << (BITS_PER_BLOCK - (i % BITS_PER_BLOCK) - 1));
 }
 
+bool BitArray::read(int i) {
+    return (blocks[i / BITS_PER_BLOCK] >> (BITS_PER_BLOCK - (i % BITS_PER_BLOCK) - 1)) & 1;
+}
+
 bool BitArray::any() const {
     return std::any_of(blocks.begin(), blocks.end(), [](unsigned long long a) {return a != 0;});
 }
@@ -279,12 +283,28 @@ BitArray::Reference& BitArray::Reference::operator=(bool value) {
     return *this;
 }
 
+BitArray::Reference::operator bool() {
+    return this->bit_array.read(this->num_bit);
+}
+
 BitArray::Reference BitArray::operator[](int i) {
     if (i >= num_bits) {
         throw BitArrayException("BitArray index out of bounds");
     }
 
     return BitArray::Reference(*this, i);
+}
+
+BitArray::Reference& BitArray::Reference::operator=(BitArray::Reference &reference) {
+    bool value = static_cast<bool>(reference.bit_array[reference.num_bit]);
+
+    if (value) {
+        bit_array.set(num_bit);
+    } else {
+        bit_array.reset(num_bit);
+    }
+
+    return *this;
 }
 
 void BitArray::push_back(bool bit) {
