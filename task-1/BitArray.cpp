@@ -9,29 +9,29 @@
 #define ALL_1 0xffffffffffffffff
 
 BitArray::BitArray() {
-    num_bits = 0;
+    numBits = 0;
 }
 
-BitArray::BitArray(int num_bits, unsigned long long value) {
-    if (num_bits < 0) {
+BitArray::BitArray(int numBits, unsigned long long value) {
+    if (numBits < 0) {
         throw BitArrayException("Number of bits can't be negative");
     }
 
-    int size = static_cast<int>((num_bits - 1) / BITS_PER_BLOCK) + 1;
+    int size = static_cast<int>((numBits - 1) / BITS_PER_BLOCK) + 1;
     blocks.resize(size);
 
-    this->num_bits = num_bits;
+    this->numBits = numBits;
     blocks[0] = value;
 }
 
 BitArray::BitArray(const BitArray &b) {
     blocks = b.blocks;
-    num_bits = b.num_bits;
+    numBits = b.numBits;
 }
 
 BitArray& BitArray::operator=(const BitArray &b) {
     blocks = b.blocks;
-    num_bits = b.num_bits;
+    numBits = b.numBits;
     return *this;
 }
 
@@ -41,31 +41,31 @@ void BitArray::swap(BitArray &b) {
     b = temp;
 }
 
-void BitArray::resize(int new_num_bits, bool value) {
-    if (new_num_bits < 0) {
+void BitArray::resize(int newNumBits, bool value) {
+    if (newNumBits < 0) {
         throw BitArrayException("Number of bits can't be negative");
     }
 
-    int new_size = static_cast<int>((new_num_bits - 1) / BITS_PER_BLOCK) + 1;
+    int newSize = static_cast<int>((newNumBits - 1) / BITS_PER_BLOCK) + 1;
     if (value) {
-        if (num_bits % BITS_PER_BLOCK != 0) {
-            blocks[blocks.size() - 1] |= ALL_1 >> (num_bits % BITS_PER_BLOCK);
+        if (numBits % BITS_PER_BLOCK != 0) {
+            blocks[blocks.size() - 1] |= ALL_1 >> (numBits % BITS_PER_BLOCK);
         }
-        blocks.resize(new_size, ALL_1);
+        blocks.resize(newSize, ALL_1);
     } else {
-        blocks.resize(new_size, 0);
+        blocks.resize(newSize, 0);
     }
 
-    if (new_num_bits % BITS_PER_BLOCK != 0) {
-        blocks[blocks.size() - 1] &= ALL_1 << (BITS_PER_BLOCK - (num_bits % BITS_PER_BLOCK));
+    if (newNumBits % BITS_PER_BLOCK != 0) {
+        blocks[blocks.size() - 1] &= ALL_1 << (BITS_PER_BLOCK - (numBits % BITS_PER_BLOCK));
     }
 
-    num_bits = new_num_bits;
+    numBits = newNumBits;
 }
 
 void BitArray::clear() {
     blocks.clear();
-    num_bits = 0;
+    numBits = 0;
 }
 
 BitArray& BitArray::operator&=(const BitArray &b) {
@@ -109,31 +109,31 @@ BitArray& BitArray::operator<<=(int n) {
         throw BitArrayException("Cannot bitshift by negative amount");
     }
 
-    if (n >= num_bits) {
+    if (n >= numBits) {
         this->reset();
         return *this;
     }
 
-    int element_shift = n / BITS_PER_BLOCK;
-    int bitwise_shift = n % BITS_PER_BLOCK;
+    int elementShift = n / BITS_PER_BLOCK;
+    int bitwiseShift = n % BITS_PER_BLOCK;
 
-    if (element_shift > 0) {
-        for (int i = 0; i < blocks.size() - element_shift; i++) {
-            blocks[i] = blocks[i + element_shift];
+    if (elementShift > 0) {
+        for (int i = 0; i < blocks.size() - elementShift; i++) {
+            blocks[i] = blocks[i + elementShift];
         }
 
-        for (int i = blocks.size() - element_shift; i < blocks.size(); i++) {
+        for (int i = blocks.size() - elementShift; i < blocks.size(); i++) {
             blocks[i] = 0;
         }
     }
 
-    if (bitwise_shift > 0) {
-        for (int i = 0; i < blocks.size() - element_shift - 1; i++) {
-            blocks[i] <<= bitwise_shift;
-            blocks[i] |= (blocks[i + 1] >> (BITS_PER_BLOCK - bitwise_shift));
+    if (bitwiseShift > 0) {
+        for (int i = 0; i < blocks.size() - elementShift - 1; i++) {
+            blocks[i] <<= bitwiseShift;
+            blocks[i] |= (blocks[i + 1] >> (BITS_PER_BLOCK - bitwiseShift));
         }
 
-        blocks[blocks.size() - element_shift - 1] <<= bitwise_shift;
+        blocks[blocks.size() - elementShift - 1] <<= bitwiseShift;
     }
 
     return *this;
@@ -144,33 +144,33 @@ BitArray& BitArray::operator>>=(int n) {
         throw BitArrayException("Cannot bitshift by negative amount");
     }
 
-    if (n >= num_bits) {
+    if (n >= numBits) {
         this->reset();
         return *this;
     }
 
-    int element_shift = n / BITS_PER_BLOCK;
-    int bitwise_shift = n % BITS_PER_BLOCK;
+    int elementShift = n / BITS_PER_BLOCK;
+    int bitwiseShift = n % BITS_PER_BLOCK;
 
-    if (element_shift > 0) {
-        for (int i = blocks.size() - 1; i >= element_shift; i--) {
-            blocks[i] = blocks[i - element_shift];
+    if (elementShift > 0) {
+        for (int i = blocks.size() - 1; i >= elementShift; i--) {
+            blocks[i] = blocks[i - elementShift];
         }
 
-        for (int i = element_shift - 1; i >= 0; i--) {
+        for (int i = elementShift - 1; i >= 0; i--) {
             blocks[i] = 0;
         }
     }
 
-    if (bitwise_shift > 0) {
-        for (int i = blocks.size() - 1; i > element_shift; i--) {
-            blocks[i] >>= bitwise_shift;
-            blocks[i] |= (blocks[i - 1] << (BITS_PER_BLOCK - bitwise_shift));
+    if (bitwiseShift > 0) {
+        for (int i = blocks.size() - 1; i > elementShift; i--) {
+            blocks[i] >>= bitwiseShift;
+            blocks[i] |= (blocks[i - 1] << (BITS_PER_BLOCK - bitwiseShift));
         }
 
-        blocks[element_shift] >>= bitwise_shift;
+        blocks[elementShift] >>= bitwiseShift;
 
-        blocks[blocks.size() - 1] &= ALL_1 << (BITS_PER_BLOCK - (num_bits % BITS_PER_BLOCK));
+        blocks[blocks.size() - 1] &= ALL_1 << (BITS_PER_BLOCK - (numBits % BITS_PER_BLOCK));
     }
 
     return *this;
@@ -181,9 +181,9 @@ BitArray BitArray::operator<<(int n) const {
         throw BitArrayException("Cannot bitshift by negative amount");
     }
 
-    BitArray shifted_bitarray(*this);
-    shifted_bitarray <<= n;
-    return shifted_bitarray;
+    BitArray shiftedBitarray(*this);
+    shiftedBitarray <<= n;
+    return shiftedBitarray;
 }
 
 BitArray BitArray::operator>>(int n) const {
@@ -191,9 +191,9 @@ BitArray BitArray::operator>>(int n) const {
         throw BitArrayException("Cannot bitshift by negative amount");
     }
 
-    BitArray shifted_bitarray(*this);
-    shifted_bitarray >>= n;
-    return shifted_bitarray;
+    BitArray shiftedBitarray(*this);
+    shiftedBitarray >>= n;
+    return shiftedBitarray;
 }
 
 BitArray& BitArray::set() {
@@ -201,8 +201,8 @@ BitArray& BitArray::set() {
         block = ALL_1;
     }
 
-    if (num_bits % BITS_PER_BLOCK != 0) {
-        blocks[blocks.size() - 1] ^= ALL_1 >> (num_bits % BITS_PER_BLOCK);
+    if (numBits % BITS_PER_BLOCK != 0) {
+        blocks[blocks.size() - 1] ^= ALL_1 >> (numBits % BITS_PER_BLOCK);
     }
 
     return *this;
@@ -237,17 +237,17 @@ bool BitArray::none() const {
 }
 
 BitArray BitArray::operator~() const {
-    BitArray inverted_bitarray(*this);
-    for (unsigned long long& block : inverted_bitarray.blocks) {
+    BitArray invertedBitarray(*this);
+    for (unsigned long long& block : invertedBitarray.blocks) {
         block = ~block;
     }
 
-    if (num_bits % BITS_PER_BLOCK != 0) {
-        inverted_bitarray.blocks[blocks.size() - 1] ^= (ALL_1 >> (num_bits % BITS_PER_BLOCK));
+    if (numBits % BITS_PER_BLOCK != 0) {
+        invertedBitarray.blocks[blocks.size() - 1] ^= (ALL_1 >> (numBits % BITS_PER_BLOCK));
 
     }
 
-    return inverted_bitarray;
+    return invertedBitarray;
 }
 
 int BitArray::count() const {
@@ -260,34 +260,34 @@ int BitArray::count() const {
 }
 
 bool BitArray::operator[](int i) const {
-    if (i >= num_bits) {
+    if (i >= numBits) {
         throw BitArrayException("BitArray index out of bounds");
     }
 
     return this->read(i);
 }
 
-BitArray::Reference::Reference(BitArray& bit_array, int i) : bit_array(bit_array) {
-    this->bit_array = bit_array;
-    this->num_bit = i;
+BitArray::Reference::Reference(BitArray& bitArray, int i) : bitArray(bitArray) {
+    this->bitArray = bitArray;
+    this->index = i;
 }
 
 BitArray::Reference& BitArray::Reference::operator=(bool value) {
     if (value) {
-        bit_array.set(num_bit);
+        bitArray.set(index);
     } else {
-        bit_array.reset(num_bit);
+        bitArray.reset(index);
     }
 
     return *this;
 }
 
 BitArray::Reference::operator bool() {
-    return this->bit_array.read(this->num_bit);
+    return this->bitArray.read(this->index);
 }
 
 BitArray::Reference BitArray::operator[](int i) {
-    if (i >= num_bits) {
+    if (i >= numBits) {
         throw BitArrayException("BitArray index out of bounds");
     }
 
@@ -295,38 +295,38 @@ BitArray::Reference BitArray::operator[](int i) {
 }
 
 BitArray::Reference& BitArray::Reference::operator=(BitArray::Reference &reference) {
-    bool value = static_cast<bool>(reference.bit_array[reference.num_bit]);
+    bool value = static_cast<bool>(reference.bitArray[reference.index]);
 
     if (value) {
-        bit_array.set(num_bit);
+        bitArray.set(index);
     } else {
-        bit_array.reset(num_bit);
+        bitArray.reset(index);
     }
 
     return *this;
 }
 
-void BitArray::push_back(bool bit) {
-    this->resize(num_bits + 1);
+void BitArray::pushBack(bool bit) {
+    this->resize(numBits + 1);
 
-    (*this)[num_bits - 1] = bit;
+    (*this)[numBits - 1] = bit;
 }
 
 int BitArray::size() const {
-    return num_bits;
+    return numBits;
 }
 
 bool BitArray::empty() const {
-    return num_bits == 0;
+    return numBits == 0;
 }
 
-std::string BitArray::to_string() const {
-    std::string string_representation;
-    for (int i = 0; i < num_bits; i++) {
-        string_representation += (*this)[i] ? '1' : '0';
+std::string BitArray::toString() const {
+    std::string stringRepresentation;
+    for (int i = 0; i < numBits; i++) {
+        stringRepresentation += (*this)[i] ? '1' : '0';
     }
 
-    return string_representation;
+    return stringRepresentation;
 }
 
 bool operator==(const BitArray& a, const BitArray& b) {
@@ -350,9 +350,9 @@ BitArray operator&(const BitArray& b1, const BitArray& b2) {
         throw BitArrayException("BitArray operands must be of the same size");
     }
 
-    BitArray new_bitarray(b1);
-    new_bitarray &= b2;
-    return new_bitarray;
+    BitArray newBitarray(b1);
+    newBitarray &= b2;
+    return newBitarray;
 }
 
 BitArray operator|(const BitArray& b1, const BitArray& b2) {
@@ -360,9 +360,9 @@ BitArray operator|(const BitArray& b1, const BitArray& b2) {
         throw BitArrayException("BitArray operands must be of the same size");
     }
 
-    BitArray new_bitarray(b1);
-    new_bitarray |= b2;
-    return new_bitarray;
+    BitArray newBitarray(b1);
+    newBitarray |= b2;
+    return newBitarray;
 }
 
 BitArray operator^(const BitArray& b1, const BitArray& b2) {
@@ -370,7 +370,7 @@ BitArray operator^(const BitArray& b1, const BitArray& b2) {
         throw BitArrayException("BitArray operands must be of the same size");
     }
 
-    BitArray new_bitarray(b1);
-    new_bitarray ^= b2;
-    return new_bitarray;
+    BitArray newBitarray(b1);
+    newBitarray ^= b2;
+    return newBitarray;
 }

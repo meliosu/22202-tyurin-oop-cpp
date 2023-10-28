@@ -50,7 +50,7 @@ TEST(BitArray, Indexing) {
     b[3] = true;
     b[7] = true;
 
-    ASSERT_EQ(b.to_string(), "10010001");
+    ASSERT_EQ(b.toString(), "10010001");
 }
 
 TEST(BitArray, Operators) {
@@ -63,18 +63,18 @@ TEST(BitArray, Operators) {
     b2[2] = true;
 
     // b1 = 1100, b2 = 1010
-    ASSERT_EQ((b1 & b2).to_string(), "1000");
-    ASSERT_EQ((b1 | b2).to_string(), "1110");
-    ASSERT_EQ((b1 ^ b2).to_string(), "0110");
-    ASSERT_EQ((~b1).to_string(), "0011");
+    ASSERT_EQ((b1 & b2).toString(), "1000");
+    ASSERT_EQ((b1 | b2).toString(), "1110");
+    ASSERT_EQ((b1 ^ b2).toString(), "0110");
+    ASSERT_EQ((~b1).toString(), "0011");
 }
 
 TEST(BitArray, PushBack) {
     BitArray b(4);
 
-    b.push_back(true);
+    b.pushBack(true);
 
-    ASSERT_EQ(b.to_string(), "00001");
+    ASSERT_EQ(b.toString(), "00001");
 }
 
 TEST(BitArray, SmallBitShifts) {
@@ -85,10 +85,10 @@ TEST(BitArray, SmallBitShifts) {
     b[7] = true;
 
     b >>= 1;
-    ASSERT_EQ(b.to_string(), "01001000");
+    ASSERT_EQ(b.toString(), "01001000");
 
     b <<= 2;
-    ASSERT_EQ(b.to_string(), "00100000");
+    ASSERT_EQ(b.toString(), "00100000");
 }
 
 TEST(BitArray, BigBitShifts) {

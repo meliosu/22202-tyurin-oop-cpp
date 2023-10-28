@@ -10,15 +10,15 @@
 
 class BitArrayException : public std::exception {
 private:
-    std::string error_message;
+    std::string errorMessage;
 
 public:
-    BitArrayException(std::string error_message) {
-        this->error_message = error_message;
+    BitArrayException(std::string errorMessage) {
+        this->errorMessage = errorMessage;
     }
 
     const char* what() const noexcept override {
-        return error_message.c_str();
+        return errorMessage.c_str();
     }
 };
 

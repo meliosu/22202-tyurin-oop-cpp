@@ -13,12 +13,12 @@
 class BitArray {
 private:
     std::vector<unsigned long long> blocks;
-    int num_bits;
+    int numBits;
 
     class Reference {
     private:
-        BitArray& bit_array;
-        int num_bit;
+        BitArray& bitArray;
+        int index;
 
     public:
         Reference(BitArray &bitArray, int i);
@@ -36,18 +36,18 @@ private:
 public:
     BitArray();
 
-    explicit BitArray(int num_bits, unsigned long long value = 0);
+    explicit BitArray(int numBits, unsigned long long value = 0);
     BitArray(const BitArray& b);
 
     void swap(BitArray& b);
 
     BitArray& operator=(const BitArray& b);
 
-    void resize(int num_bits, bool value = false);
+    void resize(int newNumBits, bool value = false);
 
     void clear();
 
-    void push_back(bool bit);
+    void pushBack(bool bit);
 
     BitArray& operator&=(const BitArray& b);
 
@@ -83,7 +83,7 @@ public:
 
     bool empty() const;
 
-    std::string to_string() const;
+    std::string toString() const;
 
     friend bool operator==(const BitArray& a, const BitArray& b);
     friend bool operator!=(const BitArray& a, const BitArray& b);
