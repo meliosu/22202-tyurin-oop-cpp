@@ -6,6 +6,7 @@
 #define TASK_2_RULE_H
 
 #include <string>
+#include <vector>
 
 class Rule {
 private:
@@ -16,7 +17,7 @@ public:
 
     // return 2 x 9 table, each table element tells if a cell with n neighbours
     // lives, dies or is created
-    bool** get_transition_table();
+    std::vector<std::vector<bool>> get_transition_table() const;
 };
 
 

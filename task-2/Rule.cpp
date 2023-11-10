@@ -4,4 +4,6 @@
 
 #include "Rule.h"
 
+std::vector<std::vector<bool>> Rule::get_transition_table() const {
 
+}
