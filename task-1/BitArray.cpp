@@ -21,7 +21,7 @@ BitArray::BitArray(int numBits, unsigned long long value) {
         throw BitArrayException("Can't initialize first bits, BitArray is too small");
     }
 
-    int size = static_cast<int>((numBits - 1) / BITS_PER_BLOCK) + 1;
+    int size = (numBits - 1) / BITS_PER_BLOCK + 1;
     blocks.resize(size);
 
     this->numBits = numBits;
@@ -50,7 +50,7 @@ void BitArray::resize(int newNumBits, bool value) {
         throw BitArrayException("Number of bits can't be negative");
     }
 
-    int newSize = static_cast<int>((newNumBits - 1) / BITS_PER_BLOCK) + 1;
+    int newSize = (newNumBits - 1) / BITS_PER_BLOCK + 1;
     if (value) {
         if (numBits % BITS_PER_BLOCK != 0) {
             blocks[blocks.size() - 1] |= ALL_1 >> (numBits % BITS_PER_BLOCK);
