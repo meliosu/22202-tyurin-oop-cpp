@@ -8,10 +8,6 @@
 #define BITS_PER_BLOCK 64
 #define ALL_1 0xffffffffffffffff
 
-BitArray::BitArray() {
-    numBits = 0;
-}
-
 BitArray::BitArray(int numBits, unsigned long long value) {
     if (numBits < 0) {
         throw BitArrayException("Number of bits can't be negative");

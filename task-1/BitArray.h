@@ -34,7 +34,8 @@ private:
     bool read(int i) const;
 
 public:
-    BitArray();
+    BitArray() = default;
+    ~BitArray() = default;
 
     explicit BitArray(int numBits, unsigned long long value = 0);
     BitArray(const BitArray& b);
