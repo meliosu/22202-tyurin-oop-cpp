@@ -18,10 +18,10 @@ private:
     class Reference {
     private:
         BitArray& bitArray;
-        int index;
+        unsigned int index;
 
     public:
-        Reference(BitArray &bitArray, int i);
+        Reference(BitArray &bitArray, unsigned int i);
         Reference& operator=(bool value);
         Reference& operator=(Reference& reference);
         operator bool();
@@ -107,14 +107,17 @@ public:
 
     // Return the value of i'th bit
     // Throws an exception if i is out of range
-    bool operator[](int i) const;
+    bool operator[](unsigned int i) const;
 
     // Assign a value to i'th bit
     // Throws an exception if i is out of range
-    Reference operator[](int i);
+    Reference operator[](unsigned int i);
 
     // Return size of BitArray in bits
     int size() const;
+
+    // Return capacity of BitArray in bits
+    int capacity() const;
 
     // Return true if BitArray size is 0, false otherwise
     bool empty() const;

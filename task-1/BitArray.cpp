@@ -259,15 +259,15 @@ int BitArray::count() const {
     return count;
 }
 
-bool BitArray::operator[](int i) const {
+bool BitArray::operator[](unsigned int i) const {
     if (i >= numBits) {
-        throw BitArrayException("BitArray index out of bounds");
+        return false;
     }
 
     return this->read(i);
 }
 
-BitArray::Reference::Reference(BitArray& bitArray, int i) : bitArray(bitArray) {
+BitArray::Reference::Reference(BitArray& bitArray, unsigned int i) : bitArray(bitArray) {
     this->bitArray = bitArray;
     this->index = i;
 }
@@ -286,9 +286,9 @@ BitArray::Reference::operator bool() {
     return this->bitArray.read(this->index);
 }
 
-BitArray::Reference BitArray::operator[](int i) {
+BitArray::Reference BitArray::operator[](unsigned int i) {
     if (i >= numBits) {
-        throw BitArrayException("BitArray index out of bounds");
+        resize(i + 1);
     }
 
     return BitArray::Reference(*this, i);
@@ -314,6 +314,10 @@ void BitArray::pushBack(bool bit) {
 
 int BitArray::size() const {
     return numBits;
+}
+
+int BitArray::capacity() const {
+    return blocks.size() * BITS_PER_BLOCK;
 }
 
 bool BitArray::empty() const {

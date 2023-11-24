@@ -131,7 +131,13 @@ TEST(BitArray, NegativeBitshift) {
 }
 
 TEST(BitArray, OutOfBounds) {
-    BitArray b(DEFAULT_SIZE);
+    BitArray b(1);
 
-    ASSERT_THROW(b[DEFAULT_SIZE + 1], BitArrayException);
+    ASSERT_EQ(b.capacity(), 64);
+
+    b[100] = 1;
+
+    ASSERT_EQ(b.size(), 101);
+    ASSERT_EQ(b.capacity(), 128);
+    ASSERT_EQ(static_cast<bool>(b[100]), 1);
 }
